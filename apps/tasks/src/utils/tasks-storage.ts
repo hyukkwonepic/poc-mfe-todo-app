@@ -34,6 +34,12 @@ export function readTasks(): Task[] {
   return tasksJson ? JSON.parse(tasksJson) : [];
 }
 
+// Read: Get a single task by ID
+export function readTask(id: string): Task | null {
+  const tasks = readTasks();
+  return tasks.find((task) => task.id === id) || null;
+}
+
 // Update: Modify an existing task
 export function updateTask(id: string, updates: TaskUpdates): Task | null {
   const tasks = readTasks();

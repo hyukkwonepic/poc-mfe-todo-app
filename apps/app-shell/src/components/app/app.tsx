@@ -1,8 +1,13 @@
 import * as React from 'react';
 
 import TasksApp from 'tasks/TasksApp';
-
 import { NavLink, Route, Routes, To } from 'react-router-dom';
+
+// const TasksApp = React.lazy(() => import('tasks/TasksApp'));
+
+// const About = React.lazy(() => import('about/Module'));
+// const Blog = React.lazy(() => import('blog/Module'));
+// const Store = React.lazy(() => import('store/Module'));
 
 function SidebarNavLink({
   to,
@@ -32,8 +37,8 @@ export function App() {
     <React.Suspense fallback={null}>
       <div className="grid grid-cols-[256px_1fr] min-h-screen h-screen">
         <aside className="px-8 py-6 border-r border-r-zinc-200">
-          <div className="text-2xl font-semibold tracking-tighter ">
-            "Hello, Todo!"
+          <div className="text-2xl font-bold tracking-tighter">
+            Hello, Todo!
           </div>
           <div className="mt-8">
             <SidebarNavLink to="/tasks">Tasks</SidebarNavLink>
@@ -42,7 +47,15 @@ export function App() {
         </aside>
         <main className="overflow-auto">
           <Routes>
-            <Route path="/tasks" element={<TasksApp />} />
+            <Route
+              path="/tasks/*"
+              // element={
+              //   <React.Suspense fallback="Loading...">
+              //     <TasksApp />
+              //   </React.Suspense>
+              // }
+              element={<TasksApp />}
+            />
           </Routes>
         </main>
       </div>

@@ -6,49 +6,50 @@ import {
   Task,
   updateTask,
 } from '../../utils/tasks-storage';
-import { FormEvent, useEffect, useState } from 'react';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { useEffect, useState } from 'react';
+import TaskForm from '../task-form/task-form';
+import { classNames } from '../../utils/class-names';
 
 function TaskItem({
   task,
-  onToggle,
+  onCompletionToggle,
   onDelete,
 }: {
   task: Task;
-  onToggle: (checked: boolean) => void;
+  onCompletionToggle: (checked: boolean) => void;
   onDelete: () => void;
 }) {
   return (
     <Link to={`/tasks/${task.id}`}>
-      <div className="flex justify-between  py-3 border-b border-solid">
+      <div className="flex justify-between  py-3 border-b border-solid hover:underline">
         <div className="space-x-2 flex items-start">
-          <div>
-            <input
-              onChange={(event) => onToggle(event.target.checked)}
-              onClick={(event) => {
-                event.stopPropagation();
-              }}
-              type="checkbox"
-              checked={task.completed}
-              className={classNames(
-                'w-4 h-4 m-1 accent-black cursor-pointer',
-                task.completed ? 'opacity-30' : ''
-              )}
-            />
-          </div>
-
           <div className={task.completed ? 'opacity-30' : ''}>
-            <div>{task.name}</div>
+            <div
+              className={classNames(
+                'font-medium',
+                task.completed ? 'line-through' : ''
+              )}
+            >
+              {task.name}
+            </div>
             {task.description && (
               <div className="text-sm">{task.description}</div>
             )}
           </div>
         </div>
 
-        <div className="justify-self-end">
+        <div className="justify-self-end space-x-3">
+          <button
+            className="italic hover:underline"
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+
+              onCompletionToggle(!task.completed);
+            }}
+          >
+            {task.completed ? 'Reopen' : 'Complete'}
+          </button>
           <button
             className="italic hover:underline"
             onClick={(event) => {
@@ -63,74 +64,6 @@ function TaskItem({
         </div>
       </div>
     </Link>
-  );
-}
-
-function TaskForm({
-  onSubmit,
-  onCancel,
-}: {
-  onSubmit: (
-    data: { name: string; description: string },
-    event: FormEvent<HTMLFormElement>
-  ) => void;
-  onCancel: () => void;
-}) {
-  return (
-    <div className=" border border-zinc-200 bg-zinc-50 rounded p-3 mt-3">
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          const formElement = event.target as HTMLFormElement;
-          const data = new FormData(formElement);
-          const name = data.get('name') as string;
-          let description = data.get('description') as string;
-
-          if (!name) {
-            alert('Name is required');
-            return;
-          }
-
-          if (!description) {
-            description = '';
-          }
-
-          onSubmit({ name, description }, event);
-          formElement.reset();
-        }}
-      >
-        <div className="space-y-2">
-          <div className="flex flex-col">
-            <input
-              name="name"
-              type="text"
-              placeholder="Task name"
-              className="placeholder:text-gray-600 p-2 rounded-sm  border border-zinc-200"
-            />
-          </div>
-          <div className="flex flex-col">
-            <textarea
-              name="description"
-              placeholder="Description"
-              className="placeholder:text-gray-600 p-2 rounded-sm  border border-zinc-200"
-            />
-          </div>
-        </div>
-        {/* <hr className="my-4" /> */}
-        <div className="flex justify-end space-x-2 mt-3">
-          <button
-            type="button"
-            className="italic hover:underline py-3"
-            onClick={onCancel}
-          >
-            Cancel
-          </button>
-          <button className="italic hover:underline py-3" type="submit">
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
   );
 }
 
@@ -172,13 +105,13 @@ export function List() {
   const completedTasks = tasks.filter((task) => task.completed);
   const uncompletedTasks = tasks.filter((task) => !task.completed);
 
-  const [foo, setFoo] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => {
     setTasks(readTasks());
   }, []);
 
-  const toggle = (task: Task) => (checked: boolean) => {
+  const handleCompletionToggle = (task: Task) => (checked: boolean) => {
     const updatedTask = updateTask(task.id, {
       completed: checked,
     });
@@ -194,7 +127,7 @@ export function List() {
     );
   };
 
-  const bar = (task: Task) => () => {
+  const handleDelete = (task: Task) => () => {
     const response = window.confirm(
       `Are you sure you want to delete ${task.name}?`
     );
@@ -212,31 +145,32 @@ export function List() {
         {uncompletedTasks.map((task) => {
           return (
             <TaskItem
+              key={task.id}
               task={task}
-              onToggle={toggle(task)}
-              onDelete={bar(task)}
+              onCompletionToggle={handleCompletionToggle(task)}
+              onDelete={handleDelete(task)}
             />
           );
         })}
         <div>
-          {foo === false && (
+          {isAdding === false && (
             <button
               className="italic w-full text-left hover:underline py-3"
               onClick={() => {
-                setFoo(true);
+                setIsAdding(true);
               }}
             >
               + Add task
             </button>
           )}
-          {foo === true && (
+          {isAdding === true && (
             <TaskForm
               onSubmit={({ name, description }, event) => {
                 const newTask = createTask(name, description);
                 setTasks([...tasks, newTask]);
               }}
               onCancel={() => {
-                setFoo(false);
+                setIsAdding(false);
               }}
             />
           )}
@@ -247,9 +181,10 @@ export function List() {
           {completedTasks.map((task) => {
             return (
               <TaskItem
+                key={task.id}
                 task={task}
-                onToggle={toggle(task)}
-                onDelete={bar(task)}
+                onCompletionToggle={handleCompletionToggle(task)}
+                onDelete={handleDelete(task)}
               />
             );
           })}
