@@ -1,0 +1,85 @@
+{
+  "name": "pomodoro",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/pomodoro/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/pomodoro",
+        "index": "apps/pomodoro/src/index.html",
+        "baseHref": "/",
+        "main": "apps/pomodoro/src/main.ts",
+        "tsConfig": "apps/pomodoro/tsconfig.app.json",
+        "assets": ["apps/pomodoro/src/favicon.ico", "apps/pomodoro/src/assets"],
+        "styles": ["apps/pomodoro/src/styles.css"],
+        "scripts": [],
+        "webpackConfig": "apps/pomodoro/webpack.config.ts",
+        "postcssConfig": "apps/pomodoro/postcss.config.js"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/pomodoro/src/environments/environment.ts",
+              "with": "apps/pomodoro/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "webpackConfig": "apps/pomodoro/webpack.config.prod.ts"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/react:module-federation-dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "pomodoro:build",
+        "hmr": true,
+        "port": 4202
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "pomodoro:build:development"
+        },
+        "production": {
+          "buildTarget": "pomodoro:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
+      "options": {
+        "buildTarget": "pomodoro:build",
+        "watch": false,
+        "port": 4202
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "pomodoro:build:development"
+        },
+        "production": {
+          "buildTarget": "pomodoro:build:production"
+        }
+      }
+    }
+  }
+}

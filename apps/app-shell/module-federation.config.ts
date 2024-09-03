@@ -14,7 +14,7 @@ const config: ModuleFederationConfig = {
    * declare module 'my-external-remote';
    *
    */
-  remotes: ["tasks"],
+  remotes: ['tasks', 'pomodoro'],
 };
 
 export default config;

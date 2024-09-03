@@ -5,7 +5,7 @@ import {
   readTask,
   Task,
   updateTask,
-} from '../../utils/tasks-storage';
+} from '@todo-app/storage/tasks-storage';
 import { classNames } from '../../utils/class-names';
 
 export function Detail() {
@@ -21,7 +21,7 @@ export function Detail() {
   const navigate = useNavigate();
 
   return (
-    <div className="max-w-screen-md mr-auto">
+    <div className="max-w-screen-sm mr-auto">
       <div className="flex items-center space-x-4">
         <h1
           className={classNames(

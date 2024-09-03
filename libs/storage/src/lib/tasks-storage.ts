@@ -1,5 +1,3 @@
-// taskStorage.ts
-
 const STORAGE_KEY = 'tasks';
 
 interface Task {
@@ -68,9 +66,6 @@ export function deleteTask(id: string): boolean {
 function saveTasks(tasks: Task[]): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
 }
-
-// You can also export the STORAGE_KEY if needed elsewhere
-export { STORAGE_KEY };
 
 // Optionally, you can export the Task interface if it's needed in other files
 export type { Task, TaskUpdates };

@@ -15,6 +15,16 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@todo-app/storage/tasks-storage": [
+        "libs/storage/src/lib/tasks-storage.ts"
+      ],
+      "@todo-app/storage/timer-storage": [
+        "libs/storage/src/lib/timer-storage.ts"
+      ],
+      "@todo-app/storage/records-storage": [
+        "libs/storage/src/lib/records-storage.ts"
+      ],
+      "pomodoro/PomodoroApp": ["apps/pomodoro/src/remote-entry.ts"],
       "tasks/TasksApp": ["apps/tasks/src/remote-entry.ts"]
     }
   },

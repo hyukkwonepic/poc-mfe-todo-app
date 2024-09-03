@@ -5,7 +5,7 @@ import {
   readTasks,
   Task,
   updateTask,
-} from '../../utils/tasks-storage';
+} from '@todo-app/storage/tasks-storage';
 import { useEffect, useState } from 'react';
 import TaskForm from '../task-form/task-form';
 import { classNames } from '../../utils/class-names';
@@ -21,7 +21,7 @@ function TaskItem({
 }) {
   return (
     <Link to={`/tasks/${task.id}`}>
-      <div className="flex justify-between  py-3 border-b border-solid hover:underline">
+      <div className="flex justify-between  py-2 border-b border-solid hover:underline">
         <div className="space-x-2 flex items-start">
           <div className={task.completed ? 'opacity-30' : ''}>
             <div
@@ -81,7 +81,7 @@ function Section({
   return (
     <section className="mt-8">
       {label && (
-        <div className="py-3 border-b space-x-2 flex justify-between">
+        <div className="py-2 border-b space-x-2 flex justify-between">
           <span className="font-semibold">{label}</span> {` `}
           {isCollapsible && (
             <button
@@ -139,7 +139,7 @@ export function List() {
   };
 
   return (
-    <div className="max-w-screen-md mr-auto">
+    <div className="max-w-screen-sm mr-auto">
       <h1 className="text-2xl font-semibold">Tasks</h1>
       <Section>
         {uncompletedTasks.map((task) => {
@@ -155,7 +155,7 @@ export function List() {
         <div>
           {isAdding === false && (
             <button
-              className="italic w-full text-left hover:underline py-3"
+              className="italic w-full text-left hover:underline py-2"
               onClick={() => {
                 setIsAdding(true);
               }}

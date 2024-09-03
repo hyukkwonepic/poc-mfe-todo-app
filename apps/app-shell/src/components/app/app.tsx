@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import TasksApp from 'tasks/TasksApp';
+import PomodoroApp from 'pomodoro/PomodoroApp';
 import { NavLink, Route, Routes, To } from 'react-router-dom';
 
 // const TasksApp = React.lazy(() => import('tasks/TasksApp'));
@@ -56,6 +57,7 @@ export function App() {
               // }
               element={<TasksApp />}
             />
+            <Route path="/pomodoro/*" element={<PomodoroApp />} />
           </Routes>
         </main>
       </div>
